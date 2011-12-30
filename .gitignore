@@ -1,0 +1,10 @@
+
+afs_proxy.opensdf
+afs_proxy.sdf
+afs_proxy/afs_proxy.vcxproj.user
+/Debug
+/afs_proxy/Debug
+/afs_proxy/x64
+/x64
+/ipch
+/libs/poco
