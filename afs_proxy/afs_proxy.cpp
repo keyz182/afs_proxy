@@ -40,6 +40,7 @@
 #include "Poco/Net/HTTPServerResponse.h"
 #include "Poco/Net/HTTPServerParams.h"
 #include "Poco/Net/HTMLForm.h"
+#include "Poco/Net/MediaType.h"
 #include "Poco/Net/PartHandler.h"
 #include "Poco/Net/MessageHeader.h"
 #include "Poco/Net/ServerSocket.h"
@@ -59,7 +60,9 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <sstream>
 
+#include "favicon.h"
 
 using Poco::URIStreamOpener;
 using Poco::Path;
@@ -85,205 +88,194 @@ using Poco::Util::HelpFormatter;
 using Poco::CountingInputStream;
 using Poco::NullOutputStream;
 using Poco::StreamCopier;
+using Poco::Net::MediaType;
 
 
-class MyPartHandler: public Poco::Net::PartHandler
-{
-public:
-	MyPartHandler():
-		_length(0)
-	{
-	}
-	
-	void handlePart(const MessageHeader& header, std::istream& stream)
-	{
-		_type = header.get("Content-Type", "(unspecified)");
-		if (header.has("Content-Disposition"))
-		{
-			std::string disp;
-			NameValueCollection params;
-			MessageHeader::splitParameters(header["Content-Disposition"], disp, params);
-			_name = params.get("name", "(unnamed)");
-			_fileName = params.get("filename", "(unnamed)");
-		}
-		
-		CountingInputStream istr(stream);
-		NullOutputStream ostr;
-		StreamCopier::copyStream(istr, ostr);
-		_length = istr.chars();
-	}
-	
-	int length() const
-	{
-		return _length;
-	}
-	
-	const std::string& name() const
-	{
-		return _name;
-	}
+class AtticRequestHandler: public HTTPRequestHandler
+    /// Return a HTML document with the current date and time.
+    {
+    public:
+        AtticRequestHandler() 
+            {
+            }
 
-	const std::string& fileName() const
-	{
-		return _fileName;
-	}
-	
-	const std::string& contentType() const
-	{
-		return _type;
-	}
-	
-private:
-	int _length;
-	std::string _type;
-	std::string _name;
-	std::string _fileName;
-};
+        void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
+            {
+            Application& app = Application::instance();
+            app.logger().information("Attic Request from " + request.clientAddress().toString());
 
+            try
+                {
+                URI uri("http://mdesk001.cs.cf.ac.uk/a.php");
+                std::auto_ptr<std::istream> pStr(URIStreamOpener::defaultOpener().open(uri));
+                StreamCopier::copyStream(*pStr.get(),response.send());
+                }
+            catch (Exception& exc)
+                {
+                std::cerr << exc.displayText() << std::endl;
+                return;
+                }
+            }
+    };
 
-class FormRequestHandler: public HTTPRequestHandler
-	/// Return a HTML document with the current date and time.
-{
-public:
-	FormRequestHandler() 
-	{
-	}
-	
-	void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
-	{
-		Application& app = Application::instance();
-		app.logger().information("Request from " + request.clientAddress().toString());
+class FavIconRequestHandler: public HTTPRequestHandler
+    {
+    public:
+        FavIconRequestHandler()
+            {
+            }
 
-                HTTPStreamFactory::registerFactory();
-                FTPStreamFactory::registerFactory();
-                
-                try
-	        {
-		        URI uri("http://mdesk001.cs.cf.ac.uk/a");
-		        std::auto_ptr<std::istream> pStr(URIStreamOpener::defaultOpener().open(uri));
-                        StreamCopier::copyStream(*pStr.get(),response.send());
-	        }
-	        catch (Exception& exc)
-	        {
-		        std::cerr << exc.displayText() << std::endl;
-		        return;
-	        }
-	}
-};
+        void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
+            {
+            Application& app = Application::instance();
+            app.logger().information("FavIcon Request from " + request.clientAddress().toString());
+            response.setContentType("image/x-icon");
+            response.setContentLength(favicon_size);
+            
+            //for( int i = 0; i < 512; i++){
+                //response.send() << s;
+            response.send().write(favicon,512);
+             //   }
+            }
+    };
 
+class RootRequestHandler: public HTTPRequestHandler
+    {
+    public:
+        RootRequestHandler()
+            {
+            }
 
-class FormRequestHandlerFactory: public HTTPRequestHandlerFactory
-{
-public:
-	FormRequestHandlerFactory()
-	{
-	}
+        void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
+            {
+            Application& app = Application::instance();
+            app.logger().information("Root Request from " + request.clientAddress().toString());
+            response.send() << "Don't do that!";
+            }
+    };
 
-	HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request)
-	{
-		return new FormRequestHandler;
-	}
-};
+class AtticRequestHandlerFactory: public HTTPRequestHandlerFactory
+    {
+    public:
+        AtticRequestHandlerFactory()
+            {
+            }
+
+        HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request)
+            {
+                if(request.getURI() == "/favicon.ico"){
+                        return new FavIconRequestHandler();
+                }else if(request.getURI() == "/"){
+                        return new RootRequestHandler;
+                }else{
+                        return new AtticRequestHandler;
+                }
+            }
+    };
 
 
 class HTTPFormServer: public Poco::Util::ServerApplication
-	/// The main application class.
-	///
-	/// This class handles command-line arguments and
-	/// configuration files.
-	/// Start the HTTPFormServer executable with the help
-	/// option (/help on Windows, --help on Unix) for
-	/// the available command line options.
-	///
-	/// To use the sample configuration file (HTTPFormServer.properties),
-	/// copy the file to the directory where the HTTPFormServer executable
-	/// resides. If you start the debug version of the HTTPFormServer
-	/// (HTTPFormServerd[.exe]), you must also create a copy of the configuration
-	/// file named HTTPFormServerd.properties. In the configuration file, you
-	/// can specify the port on which the server is listening (default
-	/// 9980) and the format of the date/Form string sent back to the client.
-	///
-	/// To test the FormServer you can use any web browser (http://localhost:9980/).
-{
-public:
-	HTTPFormServer(): _helpRequested(false)
-	{
-	}
-	
-	~HTTPFormServer()
-	{
-	}
+    /// The main application class.
+    ///
+    /// This class handles command-line arguments and
+    /// configuration files.
+    /// Start the executable with the help
+    /// option (/help on Windows, --help on Unix) for
+    /// the available command line options.
+    ///
+    /// To use the sample configuration file (HTTPFormServer.properties),
+    /// copy the file to the directory where the HTTPFormServer executable
+    /// resides. If you start the debug version of the HTTPFormServer
+    /// (HTTPFormServerd[.exe]), you must also create a copy of the configuration
+    /// file named HTTPFormServerd.properties. In the configuration file, you
+    /// can specify the port on which the server is listening (default
+    /// 9980) and the format of the date/Form string sent back to the client.
+    ///
+    /// To test the FormServer you can use any web browser (http://localhost:9980/).
+    {
+    public:
+        HTTPFormServer(): _helpRequested(false)
+            {
+            }
 
-protected:
-	void initialize(Application& self)
-	{
-		loadConfiguration(); // load default configuration files, if present
-		ServerApplication::initialize(self);
-	}
-		
-	void uninitialize()
-	{
-		ServerApplication::uninitialize();
-	}
+        ~HTTPFormServer()
+            {
+            }
 
-	void defineOptions(OptionSet& options)
-	{
-		ServerApplication::defineOptions(options);
-		
-		options.addOption(
-			Option("help", "h", "display help information on command line arguments")
-				.required(false)
-				.repeatable(false));
-	}
+    protected:
+        void initialize(Application& self)
+            {
+            loadConfiguration(); // load default configuration files, if present
+            ServerApplication::initialize(self);
+            }
 
-	void handleOption(const std::string& name, const std::string& value)
-	{
-		ServerApplication::handleOption(name, value);
+        void uninitialize()
+            {
+            ServerApplication::uninitialize();
+            }
 
-		if (name == "help")
-			_helpRequested = true;
-	}
+        void defineOptions(OptionSet& options)
+            {
+            ServerApplication::defineOptions(options);
 
-	void displayHelp()
-	{
-		HelpFormatter helpFormatter(options());
-		helpFormatter.setCommand(commandName());
-		helpFormatter.setUsage("OPTIONS");
-		helpFormatter.setHeader("A web server that shows how to work with HTML forms.");
-		helpFormatter.format(std::cout);
-	}
+            options.addOption(
+                Option("help", "h", "display help information on command line arguments")
+                .required(false)
+                .repeatable(false));
+            }
 
-	int main(const std::vector<std::string>& args)
-	{
-		if (_helpRequested)
-		{
-			displayHelp();
-		}
-		else
-		{
-			unsigned short port = (unsigned short) config().getInt("HTTPFormServer.port", 9980);
-			
-			// set-up a server socket
-			ServerSocket svs(port);
-			// set-up a HTTPServer instance
-			HTTPServer srv(new FormRequestHandlerFactory, svs, new HTTPServerParams);
-			// start the HTTPServer
-			srv.start();
-			// wait for CTRL-C or kill
-			waitForTerminationRequest();
-			// Stop the HTTPServer
-			srv.stop();
-		}
-		return Application::EXIT_OK;
-	}
-	
-private:
-	bool _helpRequested;
-};
+        void handleOption(const std::string& name, const std::string& value)
+            {
+            ServerApplication::handleOption(name, value);
+
+            if (name == "help")
+                _helpRequested = true;
+            }
+
+        void displayHelp()
+            {
+            ///TODO: Update help.
+            HelpFormatter helpFormatter(options());
+            helpFormatter.setCommand(commandName());
+            helpFormatter.setUsage("OPTIONS");
+            helpFormatter.setHeader("A web server that shows how to work with HTML forms.");
+            helpFormatter.format(std::cout);
+            }
+
+        int main(const std::vector<std::string>& args)
+            {
+            ///TODO: BOINCIFY
+            HTTPStreamFactory::registerFactory();
+            FTPStreamFactory::registerFactory();
+            if (_helpRequested)
+                {
+                displayHelp();
+                }
+            else
+                {
+                unsigned short port = (unsigned short) config().getInt("HTTPFormServer.port", 9980);
+
+                // set-up a server socket
+                ServerSocket svs(port);
+                // set-up a HTTPServer instance
+                HTTPServer srv(new AtticRequestHandlerFactory, svs, new HTTPServerParams);
+                // start the HTTPServer
+                srv.start();
+                // wait for CTRL-C or kill
+                waitForTerminationRequest();
+                // Stop the HTTPServer
+                srv.stop();
+                }
+            return Application::EXIT_OK;
+            }
+
+    private:
+        bool _helpRequested;
+    };
 
 
 int main(int argc, char** argv)
-{
-	HTTPFormServer app;
-	return app.run(argc, argv);
-}
+    {
+    HTTPFormServer app;
+    return app.run(argc, argv);
+    }

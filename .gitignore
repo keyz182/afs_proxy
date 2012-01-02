@@ -8,3 +8,6 @@ afs_proxy/afs_proxy.vcxproj.user
 /x64
 /ipch
 /libs/poco
+afs_proxy.sln.docstates.suo
+afs_proxy.suo
+afs_proxy/afs_proxy.vcxproj.filters
