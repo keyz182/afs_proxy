@@ -1,4 +1,4 @@
-#pragma warning disable C4309
+#pragma warning disable 4309
 
 /*const char favicon[534] = {
         0x00,0x00, //Must be 0

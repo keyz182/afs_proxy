@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}</ProjectGuid>
+    <ProjectGuid>{87B5168C-982B-4DCB-94F5-7F219076A513}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>afs_proxy</RootNamespace>
+    <RootNamespace>xml_test_parser</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'" Label="Configuration">
@@ -64,8 +64,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\libs\poco\Foundation\include;..\libs\poco\Net\include;..\libs\poco\Util\include;..\libs\poco\XML\include;..\libs\poco\CppUnit\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\libs\poco\lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -85,6 +83,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,7 +130,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,16 +142,12 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="afs_proxy.cpp" />
+    <ClCompile Include="PointerCollection.cpp" />
+    <ClCompile Include="xml_test_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libs\poco\Foundation\Foundation_x64_vs100.vcxproj">
       <Project>{8164d41d-b053-405b-826c-cf37ac0ef176}</Project>
-      <Private>true</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\libs\poco\Net\Net_x64_vs100.vcxproj">
       <Project>{b057a1fe-09f7-465e-b8b5-e1b659051d76}</Project>
@@ -166,7 +160,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="favicon.h" />
+    <ClInclude Include="PointerCollection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

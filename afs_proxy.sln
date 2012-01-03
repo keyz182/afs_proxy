@@ -28,6 +28,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XML", "libs\poco\XML\XML_x6
 		{8164D41D-B053-405B-826C-CF37AC0EF176} = {8164D41D-B053-405B-826C-CF37AC0EF176}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xml_test_parser", "xml_test_parser\xml_test_parser.vcxproj", "{87B5168C-982B-4DCB-94F5-7F219076A513}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		debug_static_mt|Mixed Platforms = debug_static_mt|Mixed Platforms
@@ -38,16 +40,16 @@ Global
 		release_static_mt|x64 = release_static_mt|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.debug_static_mt|Mixed Platforms.ActiveCfg = Debug|Win32
-		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.debug_static_mt|Mixed Platforms.Build.0 = Debug|Win32
-		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.debug_static_mt|Win32.ActiveCfg = Debug|Win32
-		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.debug_static_mt|Win32.Build.0 = Debug|Win32
+		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.debug_static_mt|Mixed Platforms.ActiveCfg = debug_static_mt|x64
+		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.debug_static_mt|Mixed Platforms.Build.0 = debug_static_mt|x64
+		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.debug_static_mt|Win32.ActiveCfg = debug_static_mt|Win32
+		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.debug_static_mt|Win32.Build.0 = debug_static_mt|Win32
 		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.debug_static_mt|x64.ActiveCfg = debug_static_mt|x64
 		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.debug_static_mt|x64.Build.0 = debug_static_mt|x64
-		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|Mixed Platforms.ActiveCfg = Release|Win32
-		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|Mixed Platforms.Build.0 = Release|Win32
-		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|Win32.ActiveCfg = Release|Win32
-		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|Win32.Build.0 = Release|Win32
+		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|Mixed Platforms.ActiveCfg = debug_static_mt|x64
+		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|Mixed Platforms.Build.0 = debug_static_mt|x64
+		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|Win32.ActiveCfg = release_static_mt|Win32
+		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|Win32.Build.0 = release_static_mt|Win32
 		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|x64.ActiveCfg = release_static_mt|x64
 		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|x64.Build.0 = release_static_mt|x64
 		{8164D41D-B053-405B-826C-CF37AC0EF176}.debug_static_mt|Mixed Platforms.ActiveCfg = debug_static_mt|x64
@@ -90,6 +92,18 @@ Global
 		{9E211743-85FE-4977-82F3-4F04B40C912D}.release_static_mt|Win32.ActiveCfg = release_static_mt|x64
 		{9E211743-85FE-4977-82F3-4F04B40C912D}.release_static_mt|x64.ActiveCfg = release_static_mt|x64
 		{9E211743-85FE-4977-82F3-4F04B40C912D}.release_static_mt|x64.Build.0 = release_static_mt|x64
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.debug_static_mt|Mixed Platforms.ActiveCfg = debug_static_mt|x64
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.debug_static_mt|Mixed Platforms.Build.0 = debug_static_mt|x64
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.debug_static_mt|Win32.ActiveCfg = debug_static_mt|Win32
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.debug_static_mt|Win32.Build.0 = debug_static_mt|Win32
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.debug_static_mt|x64.ActiveCfg = debug_static_mt|x64
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.debug_static_mt|x64.Build.0 = debug_static_mt|x64
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.release_static_mt|Mixed Platforms.ActiveCfg = debug_static_mt|x64
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.release_static_mt|Mixed Platforms.Build.0 = debug_static_mt|x64
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.release_static_mt|Win32.ActiveCfg = release_static_mt|Win32
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.release_static_mt|Win32.Build.0 = release_static_mt|Win32
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.release_static_mt|x64.ActiveCfg = release_static_mt|x64
+		{87B5168C-982B-4DCB-94F5-7F219076A513}.release_static_mt|x64.Build.0 = release_static_mt|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
