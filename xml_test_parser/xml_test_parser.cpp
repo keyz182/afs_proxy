@@ -41,7 +41,7 @@
 #include "Poco/URI.h"
 #include "Poco/Exception.h"
 #include <iostream>
-
+#include "PointerCollection.h"
 
 using Poco::Net::HTTPClientSession;
 using Poco::Net::HTTPRequest;
@@ -54,32 +54,13 @@ using Poco::URI;
 using Poco::Exception;
 
 
-#include "Poco/DOM/DOMParser.h"
-#include "Poco/DOM/Document.h"
-#include "Poco/DOM/NodeIterator.h"
-#include "Poco/DOM/NodeFilter.h"
-#include "Poco/DOM/AutoPtr.h"
-#include "Poco/SAX/InputSource.h"
-
-
-
-using Poco::XML::DOMParser;
-using Poco::XML::InputSource;
-using Poco::XML::Document;
-using Poco::XML::NodeIterator;
-using Poco::XML::NodeFilter;
-using Poco::XML::Node;
-using Poco::XML::AutoPtr;
-
-#include "PointerCollection.h"
-
 int main(int argc, char** argv)
-    {
+{
     std::string pointer;
-    PointerCollection p;
+    PointerCollection* p;
 
     try
-        {
+    {
         URI uri("http://voldemort.cs.cf.ac.uk:7048/dl/meta/pointer/");
         //URI uri("http://localhost:8080");
         std::string path(uri.getPathAndQuery());
@@ -92,27 +73,19 @@ int main(int argc, char** argv)
         HTTPResponse res;
         std::istream& rs = session.receiveResponse(res);
         std::cout << res.getStatus() << " " << res.getReason() << std::endl;
-        //StreamCopier::copyStream(rs, std::cout);
+
         StreamCopier::copyToString(rs,pointer);
-        printf("%s",pointer.c_str());
+        //printf("%s",pointer.c_str());
 
-        Poco::XML::DOMParser parser;
-        Poco::AutoPtr<Poco::XML::Document> pDoc = parser.parseString(pointer);
+        p = new PointerCollection(pointer.c_str());
 
-        Poco::XML::NodeIterator it(pDoc, Poco::XML::NodeFilter::SHOW_ALL);
-        Poco::XML::Node* pNode = it.nextNode();
-        while (pNode)
-            {
-            std::cout<<pNode->nodeName()<<":"<< pNode->nodeValue()<<std::endl;
-            pNode = it.nextNode();
-            }
-        }
+    }
     catch (Exception& exc)
-        {
+    {
         std::cerr << exc.displayText() << std::endl;
         return 1;
-        }
-
-
-    return 0;
     }
+
+    std::cout << p->toString();
+    return 0;
+}

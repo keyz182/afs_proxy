@@ -1,46 +1,57 @@
 #pragma once
 #include <list>
+#include "Poco/DOM/Node.h"
+
+using Poco::XML::Node;
 
 using namespace std;
 
 class DataDescription
-    {
-    public:
-        DataDescription(void);
-        ~DataDescription(void);
+{
+public:
+    DataDescription(Poco::XML::Node*);
+    ~DataDescription(void);
 
-        std::string toString();
-    };
+    std::string id;
+    std::string name;
+    std::string project;
+    std::string description;
+
+    std::string toString();
+};
 
 class Endpoint
-    {
-    public:
-        Endpoint(void);
-        ~Endpoint(void);
+{
+public:
+    Endpoint(Poco::XML::Node*);
+    ~Endpoint(void);
 
-        std::string toString();
-    };
+    std::string url;
+    std::string meta;
+
+    std::string toString();
+};
 
 class DataPointer
-    {
-    public:
-        DataDescription *dd;
-        list<Endpoint> *ep;
-        DataPointer(void);
-        ~DataPointer(void);
-        
-        std::string toString();
-    };
+{
+public:
+    DataDescription *dd;
+    list<Endpoint> *ep;
+    DataPointer(Poco::XML::Node*);
+    ~DataPointer(void);
+
+    std::string toString();
+};
 
 class PointerCollection
-    {
-    public:
-        list<DataPointer> *dp;
+{
+public:
+    list<DataPointer> *dp;
 
-        PointerCollection(void);
-        ~PointerCollection(void);
-        
-        std::string toString();
-    };
+    PointerCollection(const char*);
+    ~PointerCollection(void);
+
+    std::string toString();
+};
 
 
