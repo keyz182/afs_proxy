@@ -13,3 +13,5 @@ afs_proxy/afs_proxy.vcxproj.filters
 /xml_test_parser/x64
 /xml_test_parser/Debug
 *.obj
+*.user
+*.filters

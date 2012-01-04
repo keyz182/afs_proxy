@@ -41,7 +41,9 @@
 #include "Poco/URI.h"
 #include "Poco/Exception.h"
 #include <iostream>
+#include <sstream>
 #include "PointerCollection.h"
+#include "Filehash.h"
 
 using Poco::Net::HTTPClientSession;
 using Poco::Net::HTTPRequest;
@@ -54,14 +56,11 @@ using Poco::URI;
 using Poco::Exception;
 
 
-int main(int argc, char** argv)
-{
-    std::string pointer;
-    PointerCollection* p;
-
+std::string get(std::string url){
+    std::string out;
     try
     {
-        URI uri("http://voldemort.cs.cf.ac.uk:7048/dl/meta/pointer/");
+        URI uri(url);
         //URI uri("http://localhost:8080");
         std::string path(uri.getPathAndQuery());
         if (path.empty()) path = "/";
@@ -74,18 +73,48 @@ int main(int argc, char** argv)
         std::istream& rs = session.receiveResponse(res);
         std::cout << res.getStatus() << " " << res.getReason() << std::endl;
 
-        StreamCopier::copyToString(rs,pointer);
-        //printf("%s",pointer.c_str());
-
-        p = new PointerCollection(pointer.c_str());
-
+        StreamCopier::copyToString(rs,out);
     }
     catch (Exception& exc)
     {
         std::cerr << exc.displayText() << std::endl;
+        return "-1";
+    }
+
+    return out;
+}
+
+int main(int argc, char** argv)
+{
+    std::string pointer;
+
+    pointer = get("http://voldemort.cs.cf.ac.uk:7048/dl/meta/pointer/");
+
+    if(pointer == "-1"){
         return 1;
+    }
+
+    PointerCollection* p = new PointerCollection(pointer.c_str());
+
+    list<DataPointer>::iterator i;
+
+    for(i = p->dp->begin(); i != p->dp->end(); i++){
+        list<Endpoint>::iterator e;
+
+        for(e = (*i).ep->begin(); e != (*i).ep->end(); e++){
+            std::stringstream ss;
+            ss << (*e).meta << "?filehash=" << (*i).dd->id;
+            std::string out = get(ss.str());
+            
+            if(out != "-1"){
+                Filehash* f = new Filehash(out.c_str());
+                std::cout << f->toString();
+            }
+            std::cout << "\n";
+        }
     }
 
     std::cout << p->toString();
     return 0;
 }
+

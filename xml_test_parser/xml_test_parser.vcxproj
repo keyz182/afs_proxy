@@ -80,6 +80,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Filehash.cpp" />
     <ClCompile Include="PointerCollection.cpp" />
     <ClCompile Include="xml_test_parser.cpp" />
   </ItemGroup>
@@ -98,6 +99,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Filehash.h" />
     <ClInclude Include="PointerCollection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
