@@ -1,0 +1,3 @@
+[submodule "libs/poco"]
+	path = libs/poco
+	url = git@github.com:keyz182/Poco-1.4.3.git

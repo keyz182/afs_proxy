@@ -7,9 +7,9 @@ afs_proxy/afs_proxy.vcxproj.user
 /afs_proxy/x64
 /x64
 /ipch
-/libs/poco
 afs_proxy.sln.docstates.suo
 afs_proxy.suo
 afs_proxy/afs_proxy.vcxproj.filters
 /xml_test_parser/x64
 /xml_test_parser/Debug
+*.obj
