@@ -80,7 +80,9 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="Filehash.cpp" />
+    <ClCompile Include="HTTPUtils.cpp" />
     <ClCompile Include="PointerCollection.cpp" />
     <ClCompile Include="xml_test_parser.cpp" />
   </ItemGroup>
@@ -99,7 +101,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Chunk.h" />
     <ClInclude Include="Filehash.h" />
+    <ClInclude Include="HTTPUtils.h" />
     <ClInclude Include="PointerCollection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

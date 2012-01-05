@@ -28,6 +28,8 @@ public:
 
     std::string url;
     std::string meta;
+    bool accessible;
+
 
     std::string toString();
 };

@@ -128,6 +128,7 @@ std::string DataDescription::toString()
 
 Endpoint::Endpoint(Poco::XML::Node*pNode)
 {
+    this->accessible = false;
     Poco::XML::Node* nEE = pNode->firstChild();
 
     while(nEE){
