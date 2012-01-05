@@ -129,6 +129,9 @@ int main(int argc, char** argv)
         StreamCopier::copyStream(istr,ostr);
     }
 
+
+    ///TODO: check the chunk has downloaded. Check they're all there.
+
     tp.joinAll();
 
     std::cout << p->toString();
