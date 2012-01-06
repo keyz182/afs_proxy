@@ -8,6 +8,7 @@
 #include "Poco/Path.h"
 #include "Poco/URI.h"
 #include "Poco/Exception.h"
+#include <iostream>
 
 using Poco::Net::HTTPClientSession;
 using Poco::Net::HTTPRequest;

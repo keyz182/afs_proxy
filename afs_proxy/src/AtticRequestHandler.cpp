@@ -12,6 +12,7 @@
 #include "Filehash.h"
 #include "Chunk.h"
 #include "HTTPUtils.h"
+#include <iostream>
 #include <fstream>
 
 #include "Poco/DigestStream.h"
@@ -178,7 +179,6 @@ void AtticRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerRe
         std::cout << p->toString();
 
         istr.close();
-        delete istr;
 
         if(f->hash.compare(result) !=0){
             response.setStatus(Poco::Net::HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);

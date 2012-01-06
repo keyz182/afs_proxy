@@ -10,6 +10,7 @@
 #include "Poco/URI.h"
 #include "Poco/Exception.h"
 #include <fstream>
+#include <iostream>
 
 #include "Poco/DigestStream.h"
 #include "Poco/MD5Engine.h"
