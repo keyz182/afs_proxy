@@ -39,7 +39,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\libs\poco\Foundation\include;..\libs\poco\Net\include;..\libs\poco\Util\include;..\libs\poco\XML\include;..\libs\poco\CppUnit\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\libs\poco\Foundation\include;..\libs\poco\Net\include;..\libs\poco\Util\include;..\libs\poco\XML\include;..\libs\poco\CppUnit\include;.\includes;$(IncludePath)</IncludePath>
     <LibraryPath>..\libs\poco\lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">
@@ -81,12 +81,12 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="afs_proxy.cpp" />
-    <ClCompile Include="AtticRequestHandler.cpp" />
-    <ClCompile Include="Chunk.cpp" />
-    <ClCompile Include="Filehash.cpp" />
-    <ClCompile Include="HTTPUtils.cpp" />
-    <ClCompile Include="PointerCollection.cpp" />
+    <ClCompile Include="src/afs_proxy.cpp" />
+    <ClCompile Include="src/AtticRequestHandler.cpp" />
+    <ClCompile Include="src/Chunk.cpp" />
+    <ClCompile Include="src/Filehash.cpp" />
+    <ClCompile Include="src/HTTPUtils.cpp" />
+    <ClCompile Include="src/PointerCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libs\poco\Foundation\Foundation_x64_vs100.vcxproj">
@@ -108,12 +108,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AtticRequestHandler.h" />
-    <ClInclude Include="Chunk.h" />
-    <ClInclude Include="favicon.h" />
-    <ClInclude Include="Filehash.h" />
-    <ClInclude Include="HTTPUtils.h" />
-    <ClInclude Include="PointerCollection.h" />
+    <ClInclude Include="includes/AtticRequestHandler.h" />
+    <ClInclude Include="includes/Chunk.h" />
+    <ClInclude Include="includes/favicon.h" />
+    <ClInclude Include="includes/Filehash.h" />
+    <ClInclude Include="includes/HTTPUtils.h" />
+    <ClInclude Include="includes/PointerCollection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
