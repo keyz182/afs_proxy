@@ -30,6 +30,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XML", "libs\poco\XML\XML_x6
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xml_test_parser", "xml_test_parser\xml_test_parser.vcxproj", "{87B5168C-982B-4DCB-94F5-7F219076A513}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C2D54C0A-414A-4401-ADF0-6AFFBA666161}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		debug_static_mt|Mixed Platforms = debug_static_mt|Mixed Platforms

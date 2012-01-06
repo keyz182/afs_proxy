@@ -36,7 +36,7 @@
 #include "Poco/Random.h"
 #include "Poco/Path.h"
 #include "Poco/File.h"
-#include <iostream>
+#include <algorithm>
 #include <sstream>
 #include "PointerCollection.h"
 #include "Filehash.h"
@@ -44,7 +44,11 @@
 #include "HTTPUtils.h"
 #include <fstream>
 
-
+#include "Poco/DigestStream.h"
+#include "Poco/MD5Engine.h"
+using Poco::DigestOutputStream;
+using Poco::DigestEngine;
+using Poco::MD5Engine;
 
 using Poco::Random;
 using Poco::StreamCopier;
@@ -90,14 +94,14 @@ int main(int argc, char** argv)
     }
 
     int noValidEndpoints = (int) validEndpoints.size();
-    
+
     Random r;
 
     //std::cout << r.next(noValidEndpoints);
 
     list<Segment>::iterator it;
     list<Chunk> chunks;
-    
+
     for(it = f->seg->begin(); it != f->seg->end(); it++)
     {
         chunks.push_back(Chunk(validEndpoints,(*it).hash,(*it).start,(*it).end));
@@ -117,22 +121,62 @@ int main(int argc, char** argv)
         tp.start((*cit));
     }
 
-    Path path("C:\\Users\\keyz\\test.txt", Path::PATH_WINDOWS);
-    File file(path);
-    file.createFile();
+    tp.joinAll();
 
-    std::ofstream ostr(file.path().c_str(), std::ios::binary);
+    bool chunksFailed = true;
+
+    while(chunksFailed){
+        chunksFailed = false;
+        for(cit = chunks.begin(); cit != chunks.end(); cit++)
+        {
+            if((*cit).failed){
+                chunksFailed = true;
+                while(tp.available() <= 0)
+                {
+                    tp.collect();
+                }
+
+                tp.start((*cit));
+            }
+        }
+        tp.joinAll();
+    }
+
+    Poco::TemporaryFile tmp;
+
+    std::ofstream ostr(tmp.path().c_str(), std::ios::binary);
 
     for(cit = chunks.begin(); cit != chunks.end(); cit++)
     {
         std::ifstream istr((*cit).tmp.path().c_str(),std::ios::binary);
         StreamCopier::copyStream(istr,ostr);
+        istr.close();
     }
+
+    ostr.close();
 
 
     ///TODO: check the chunk has downloaded. Check they're all there.
 
-    tp.joinAll();
+    MD5Engine md5;
+    DigestOutputStream md5str(md5);
+
+    std::ifstream istr(tmp.path().c_str(), std::ios::binary);
+
+    StreamCopier::copyStream(istr,md5str);
+
+    md5str.flush();
+
+
+    const DigestEngine::Digest& digest = md5.digest(); // obtain result
+    std::string result = DigestEngine::digestToHex(digest);
+
+    //Workaround, attic seems to be randomly dropping zeros from md5 hashes.
+
+    result.erase(remove(result.begin(),result.end(),'0'),result.end());
+    f->hash.erase(std::remove(f->hash.begin(),f->hash.end(),'0'),f->hash.end());
+
+    std::cout << "\n" << result << "\n" << f->hash << "\n";
 
     std::cout << p->toString();
     return 0;
