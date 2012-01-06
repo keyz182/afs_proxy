@@ -82,6 +82,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="afs_proxy.cpp" />
+    <ClCompile Include="AtticRequestHandler.cpp" />
+    <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="Filehash.cpp" />
+    <ClCompile Include="HTTPUtils.cpp" />
+    <ClCompile Include="PointerCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libs\poco\Foundation\Foundation_x64_vs100.vcxproj">
@@ -103,7 +108,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AtticRequestHandler.h" />
+    <ClInclude Include="Chunk.h" />
     <ClInclude Include="favicon.h" />
+    <ClInclude Include="Filehash.h" />
+    <ClInclude Include="HTTPUtils.h" />
+    <ClInclude Include="PointerCollection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

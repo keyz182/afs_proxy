@@ -61,7 +61,7 @@
 #include <memory>
 #include <string>
 #include <sstream>
-
+#include "AtticRequestHandler.h"
 #include "favicon.h"
 
 using Poco::URIStreamOpener;
@@ -89,34 +89,6 @@ using Poco::CountingInputStream;
 using Poco::NullOutputStream;
 using Poco::StreamCopier;
 using Poco::Net::MediaType;
-
-
-class AtticRequestHandler: public HTTPRequestHandler
-    /// Return a HTML document with the current date and time.
-    {
-    public:
-        AtticRequestHandler() 
-            {
-            }
-
-        void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
-            {
-            Application& app = Application::instance();
-            app.logger().information("Attic Request from " + request.clientAddress().toString());
-
-            try
-                {
-                URI uri("http://mdesk001.cs.cf.ac.uk/a.php");
-                std::auto_ptr<std::istream> pStr(URIStreamOpener::defaultOpener().open(uri));
-                StreamCopier::copyStream(*pStr.get(),response.send());
-                }
-            catch (Exception& exc)
-                {
-                std::cerr << exc.displayText() << std::endl;
-                return;
-                }
-            }
-    };
 
 class FavIconRequestHandler: public HTTPRequestHandler
     {
