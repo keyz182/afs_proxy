@@ -1,0 +1,14 @@
+Requires: OpenSSL-dev
+
+cd libs/poco
+./configure --no-tests --no-samples --static --omit=Data/MySQL,Data/ODBC,Zip,Crypto,CppUnit,NetSSL_OpenSSL
+make -j4
+
+cd ../boinc
+./_autosetup
+./configure -C --enable-pkg-devel --enable-debug --enable-static
+make -j4
+
+cd ../../afs_proxy
+
+
