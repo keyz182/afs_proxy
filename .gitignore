@@ -1,4 +1,3 @@
-
 afs_proxy.opensdf
 afs_proxy.sdf
 afs_proxy/afs_proxy.vcxproj.user
@@ -10,8 +9,6 @@ afs_proxy/afs_proxy.vcxproj.user
 afs_proxy.sln.docstates.suo
 afs_proxy.suo
 afs_proxy/afs_proxy.vcxproj.filters
-/xml_test_parser/x64
-/xml_test_parser/Debug
 *.obj
 *.user
 *.sdf
