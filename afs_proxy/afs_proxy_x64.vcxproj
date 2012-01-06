@@ -39,7 +39,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\libs\poco\Foundation\include;..\libs\poco\Net\include;..\libs\poco\Util\include;..\libs\poco\XML\include;..\libs\poco\CppUnit\include;.\includes;$(IncludePath)</IncludePath>
+    <IncludePath>..\libs\poco\Foundation\include;..\libs\poco\Net\include;..\libs\poco\Util\include;..\libs\poco\XML\include;..\libs\poco\CppUnit\include;.\includes;..\libs\boinc;..\libs\boinc\api;..\libs;..\libs\boinc\lib;$(IncludePath)</IncludePath>
     <LibraryPath>..\libs\poco\lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">
@@ -89,6 +89,12 @@
     <ClCompile Include="src/PointerCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\libs\libboincapi_staticcrt.vcxproj">
+      <Project>{07bda8f7-4aaf-4a3b-b96e-ea72a143c5ae}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\libboinc_staticcrt.vcxproj">
+      <Project>{b00664bd-71eb-46c1-957e-cd851418d395}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\libs\poco\Foundation\Foundation_x64_vs100.vcxproj">
       <Project>{8164d41d-b053-405b-826c-cf37ac0ef176}</Project>
       <Private>true</Private>

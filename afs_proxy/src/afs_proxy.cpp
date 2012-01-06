@@ -61,6 +61,22 @@
 #include <memory>
 #include <string>
 #include <sstream>
+
+#include "boinc_api.h"
+
+#ifdef _WIN32
+//#include "boinc_win.h"
+#else
+#include "config.h"
+#include <cstdio>
+#include <cctype>
+#include <ctime>
+#include <cstring>
+#include <cstdlib>
+#include <csignal>
+#include <unistd.h>
+#endif
+
 #include "AtticRequestHandler.h"
 #include "favicon.h"
 
@@ -91,59 +107,59 @@ using Poco::StreamCopier;
 using Poco::Net::MediaType;
 
 class FavIconRequestHandler: public HTTPRequestHandler
+{
+public:
+    FavIconRequestHandler()
     {
-    public:
-        FavIconRequestHandler()
-            {
-            }
+    }
 
-        void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
-            {
-            Application& app = Application::instance();
-            app.logger().information("FavIcon Request from " + request.clientAddress().toString());
-            response.setContentType("image/x-icon");
-            response.setContentLength(favicon_size);
-            
-            //for( int i = 0; i < 512; i++){
-                //response.send() << s;
-            response.send().write(favicon,512);
-             //   }
-            }
-    };
+    void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
+    {
+        Application& app = Application::instance();
+        app.logger().information("FavIcon Request from " + request.clientAddress().toString());
+        response.setContentType("image/x-icon");
+        response.setContentLength(favicon_size);
+
+        //for( int i = 0; i < 512; i++){
+        //response.send() << s;
+        response.send().write(favicon,512);
+        //   }
+    }
+};
 
 class RootRequestHandler: public HTTPRequestHandler
+{
+public:
+    RootRequestHandler()
     {
-    public:
-        RootRequestHandler()
-            {
-            }
+    }
 
-        void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
-            {
-            Application& app = Application::instance();
-            app.logger().information("Root Request from " + request.clientAddress().toString());
-            response.send() << "Don't do that!";
-            }
-    };
+    void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
+    {
+        Application& app = Application::instance();
+        app.logger().information("Root Request from " + request.clientAddress().toString());
+        response.send() << "Don't do that!";
+    }
+};
 
 class AtticRequestHandlerFactory: public HTTPRequestHandlerFactory
+{
+public:
+    AtticRequestHandlerFactory()
     {
-    public:
-        AtticRequestHandlerFactory()
-            {
-            }
+    }
 
-        HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request)
-            {   
-                if(request.getURI() == "/favicon.ico"){
-                        return new FavIconRequestHandler();
-                }else if(request.getURI().substr(0,6) == "/data/"){
-                        return new AtticRequestHandler;
-                }else{
-                        return new RootRequestHandler;
-                }
-            }
-    };
+    HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request)
+    {   
+        if(request.getURI() == "/favicon.ico"){
+            return new FavIconRequestHandler();
+        }else if(request.getURI().substr(0,6) == "/data/"){
+            return new AtticRequestHandler;
+        }else{
+            return new RootRequestHandler;
+        }
+    }
+};
 
 
 class HTTPFormServer: public Poco::Util::ServerApplication
@@ -164,90 +180,101 @@ class HTTPFormServer: public Poco::Util::ServerApplication
     /// 9980) and the format of the date/Form string sent back to the client.
     ///
     /// To test the FormServer you can use any web browser (http://localhost:9980/).
+{
+public:
+    HTTPFormServer(): _helpRequested(false)
     {
-    public:
-        HTTPFormServer(): _helpRequested(false)
-            {
-            }
+    }
 
-        ~HTTPFormServer()
-            {
-            }
+    ~HTTPFormServer()
+    {
+    }
 
-    protected:
-        void initialize(Application& self)
-            {
-            loadConfiguration(); // load default configuration files, if present
-            ServerApplication::initialize(self);
-            }
+protected:
+    void initialize(Application& self)
+    {
+        loadConfiguration(); // load default configuration files, if present
+        ServerApplication::initialize(self);
+    }
 
-        void uninitialize()
-            {
-            ServerApplication::uninitialize();
-            }
+    void uninitialize()
+    {
+        ServerApplication::uninitialize();
+    }
 
-        void defineOptions(OptionSet& options)
-            {
-            ServerApplication::defineOptions(options);
+    void defineOptions(OptionSet& options)
+    {
+        ServerApplication::defineOptions(options);
 
-            options.addOption(
-                Option("help", "h", "display help information on command line arguments")
-                .required(false)
-                .repeatable(false));
-            }
+        options.addOption(
+            Option("help", "h", "display help information on command line arguments")
+            .required(false)
+            .repeatable(false));
+    }
 
-        void handleOption(const std::string& name, const std::string& value)
-            {
-            ServerApplication::handleOption(name, value);
+    void handleOption(const std::string& name, const std::string& value)
+    {
+        ServerApplication::handleOption(name, value);
 
-            if (name == "help")
-                _helpRequested = true;
-            }
+        if (name == "help")
+            _helpRequested = true;
+    }
 
-        void displayHelp()
-            {
-            ///TODO: Update help.
-            HelpFormatter helpFormatter(options());
-            helpFormatter.setCommand(commandName());
-            helpFormatter.setUsage("OPTIONS");
-            helpFormatter.setHeader("A web server that shows how to work with HTML forms.");
-            helpFormatter.format(std::cout);
-            }
+    void displayHelp()
+    {
+        ///TODO: Update help.
+        HelpFormatter helpFormatter(options());
+        helpFormatter.setCommand(commandName());
+        helpFormatter.setUsage("OPTIONS");
+        helpFormatter.setHeader("A web server that shows how to work with HTML forms.");
+        helpFormatter.format(std::cout);
+    }
 
-        int main(const std::vector<std::string>& args)
-            {
-            ///TODO: BOINCIFY
-            HTTPStreamFactory::registerFactory();
-            FTPStreamFactory::registerFactory();
-            if (_helpRequested)
-                {
-                displayHelp();
-                }
-            else
-                {
-                unsigned short port = (unsigned short) config().getInt("HTTPFormServer.port", 9980);
+    int main(const std::vector<std::string>& args)
+    {
+        ///TODO: BOINCIFY
+        char buf[256];
+        int retval = boinc_init();
+        if (retval) {
+            fprintf(stderr, "%s boinc_init returned %d\n",
+                boinc_msg_prefix(buf, sizeof(buf)), retval
+                );
+            exit(retval);
+        }
 
-                // set-up a server socket
-                ServerSocket svs(port);
-                // set-up a HTTPServer instance
-                HTTPServer srv(new AtticRequestHandlerFactory, svs, new HTTPServerParams);
-                // start the HTTPServer
-                srv.start();
-                // wait for CTRL-C or kill
-                waitForTerminationRequest();
-                // Stop the HTTPServer
-                srv.stop();
-                }
-            return Application::EXIT_OK;
-            }
+        HTTPStreamFactory::registerFactory();
+        FTPStreamFactory::registerFactory();
+        if (_helpRequested)
+        {
+            displayHelp();
+        }
+        else
+        {
+            unsigned short port = (unsigned short) config().getInt("HTTPFormServer.port", 9980);
 
-    private:
-        bool _helpRequested;
-    };
+            // set-up a server socket
+            ServerSocket svs(port);
+            // set-up a HTTPServer instance
+            HTTPServer srv(new AtticRequestHandlerFactory, svs, new HTTPServerParams);
+            // start the HTTPServer
+            srv.start();
+            // wait for CTRL-C or kill
+            waitForTerminationRequest();
+            // Stop the HTTPServer
+            srv.stop();
+        }
+
+        boinc_finish(0);
+        return Application::EXIT_OK;
+    }
+
+private:
+    bool _helpRequested;
+};
 
 
 int main(int argc, char** argv)
-    {
+{
     HTTPFormServer app;
     return app.run(argc, argv);
-    }
+}
