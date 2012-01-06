@@ -58,7 +58,7 @@ void Chunk::run()
             this->failed = false;
             return;
         }catch(Exception& exc){
-            std::cout << "Endpoint failed: " << (*it);
+            std::cerr << "Endpoint failed: " << (*it) << "\n" << exc.displayText();
             this->failed = true;
             continue;
         }
@@ -121,17 +121,13 @@ void Chunk::getData(std::string url, long start, long end)
         dataHash.erase(std::remove(dataHash.begin(),dataHash.end(),'0'),dataHash.end());
         this->hash.erase(std::remove(this->hash.begin(),this->hash.end(),'0'),this->hash.end());
 
-        std::cout << "\n" << dataHash << "\n" << this->hash;
-
-        std::cout << "\n";
+        std::cout << "\n" << dataHash << "\n" << this->hash << "\n";
 
         //rs.read(data,end-start);
 
     }
     catch (Exception& exc)
     {
-        std::cerr << exc.name() << ", " << exc.displayText() << std::endl;
-
         exc.rethrow();
         /*
         data = 0;

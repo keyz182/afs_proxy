@@ -17,6 +17,11 @@
 #include "Poco/DigestStream.h"
 #include "Poco/MD5Engine.h"
 
+#include "Poco/Util/IniFileConfiguration.h"
+
+using Poco::AutoPtr;
+using Poco::Util::IniFileConfiguration;
+
 using Poco::Exception;
 using Poco::DigestOutputStream;
 using Poco::DigestEngine;
@@ -33,16 +38,27 @@ AtticRequestHandler::AtticRequestHandler()
 
 void AtticRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
 {
+    File ini("config.ini");
+
+    std::string datalookup = "http://voldemort.cs.cf.ac.uk:7048/dl/meta/pointer/";
+
+    if(ini.exists()){
+        AutoPtr<IniFileConfiguration> pConf(new IniFileConfiguration(ini.path()));
+        datalookup = pConf->getString("afsproxy.datalookup","http://voldemort.cs.cf.ac.uk:7048/dl/meta/pointer/");
+    }
+
     Application& app = Application::instance();
     app.logger().information("Attic Request from " + request.clientAddress().toString());
 
+    Path path(request.getURI());
+
     try
     {
-        Filehash* f;
+        Filehash* f = 0;
         std::string pointer;
         std::vector<std::string> validEndpoints;
 
-        pointer = HTTPUtils::get("http://voldemort.cs.cf.ac.uk:7048/dl/meta/pointer/");
+        pointer = HTTPUtils::get(datalookup);
 
         if(pointer == "-1"){
             return ;
@@ -53,32 +69,35 @@ void AtticRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerRe
         list<DataPointer>::iterator i;
 
         for(i = p->dp->begin(); i != p->dp->end(); i++){
-            list<Endpoint>::iterator e;
 
-            for(e = (*i).ep->begin(); e != (*i).ep->end(); e++){
-                std::stringstream ss;
-                ss << (*e).meta << "?filehash=" << (*i).dd->id;
-                std::string out = HTTPUtils::get(ss.str());
+            if((*i).dd->id.compare(path.getFileName())==0){
+                list<Endpoint>::iterator e;
 
-                if(out != "-1"){
-                    f = new Filehash(out.c_str());
-                    std::cout << f->toString();
-                    (*e).accessible = true;
-                    validEndpoints.push_back((*e).url);
+                for(e = (*i).ep->begin(); e != (*i).ep->end(); e++){
+                    std::stringstream ss;
+                    ss << (*e).meta << "?filehash=" << (*i).dd->id;
+                    std::string out = HTTPUtils::get(ss.str());
+
+                    if(out != "-1"){
+                        f = new Filehash(out.c_str());
+                        std::cout << f->toString();
+                        (*e).accessible = true;
+                        validEndpoints.push_back((*e).url);
+                    }
+                    std::cout << "\n";
                 }
-                std::cout << "\n";
             }
-        }
-
-        if(!f){
-            return;
         }
 
         int noValidEndpoints = (int) validEndpoints.size();
 
-        Random r;
+        if((f==0) || (noValidEndpoints < 1)){
+            response.setStatus(Poco::Net::HTTPResponse::HTTP_NOT_FOUND);
+            response.setReason("ID Not found");
+            response.send() << "ID Not Found";
+            return;
+        }
 
-        //std::cout << r.next(noValidEndpoints);
 
         list<Segment>::iterator it;
         list<Chunk> chunks;
@@ -136,9 +155,6 @@ void AtticRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerRe
 
         ostr.close();
 
-
-        ///TODO: check the chunk has downloaded. Check they're all there.
-
         MD5Engine md5;
         DigestOutputStream md5str(md5);
 
@@ -164,10 +180,16 @@ void AtticRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerRe
         istr.close();
         delete istr;
 
-        std::ifstream is(tmp.path().c_str(), std::ios::binary);
-
-        StreamCopier::copyStream(is,response.send());
+        if(f->hash.compare(result) !=0){
+            response.setStatus(Poco::Net::HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+            response.setReason("File hash didn't match");
+            response.send() << "Failed";
+        }else{
+            std::ifstream is(tmp.path().c_str(), std::ios::binary);
+            StreamCopier::copyStream(is,response.send());
+        }
         return ;
+
     }
     catch (Exception& exc)
     {

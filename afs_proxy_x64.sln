@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "afs_proxy", "afs_proxy\afs_proxy.vcxproj", "{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "afs_proxy_x64", "afs_proxy\afs_proxy_x64.vcxproj", "{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8164D41D-B053-405B-826C-CF37AC0EF176} = {8164D41D-B053-405B-826C-CF37AC0EF176}
 		{9E211743-85FE-4977-82F3-4F04B40C912D} = {9E211743-85FE-4977-82F3-4F04B40C912D}
@@ -51,7 +51,6 @@ Global
 		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|x64.ActiveCfg = release_static_mt|x64
 		{9AFA6B62-35AD-4CBA-95A4-06DBF84A900F}.release_static_mt|x64.Build.0 = release_static_mt|x64
 		{8164D41D-B053-405B-826C-CF37AC0EF176}.debug_static_mt|Mixed Platforms.ActiveCfg = debug_static_mt|x64
-		{8164D41D-B053-405B-826C-CF37AC0EF176}.debug_static_mt|Mixed Platforms.Build.0 = debug_static_mt|x64
 		{8164D41D-B053-405B-826C-CF37AC0EF176}.debug_static_mt|Win32.ActiveCfg = debug_static_mt|x64
 		{8164D41D-B053-405B-826C-CF37AC0EF176}.debug_static_mt|x64.ActiveCfg = debug_static_mt|x64
 		{8164D41D-B053-405B-826C-CF37AC0EF176}.debug_static_mt|x64.Build.0 = debug_static_mt|x64
@@ -61,7 +60,6 @@ Global
 		{8164D41D-B053-405B-826C-CF37AC0EF176}.release_static_mt|x64.ActiveCfg = release_static_mt|x64
 		{8164D41D-B053-405B-826C-CF37AC0EF176}.release_static_mt|x64.Build.0 = release_static_mt|x64
 		{B057A1FE-09F7-465E-B8B5-E1B659051D76}.debug_static_mt|Mixed Platforms.ActiveCfg = debug_static_mt|x64
-		{B057A1FE-09F7-465E-B8B5-E1B659051D76}.debug_static_mt|Mixed Platforms.Build.0 = debug_static_mt|x64
 		{B057A1FE-09F7-465E-B8B5-E1B659051D76}.debug_static_mt|Win32.ActiveCfg = debug_static_mt|x64
 		{B057A1FE-09F7-465E-B8B5-E1B659051D76}.debug_static_mt|x64.ActiveCfg = debug_static_mt|x64
 		{B057A1FE-09F7-465E-B8B5-E1B659051D76}.debug_static_mt|x64.Build.0 = debug_static_mt|x64
@@ -71,7 +69,6 @@ Global
 		{B057A1FE-09F7-465E-B8B5-E1B659051D76}.release_static_mt|x64.ActiveCfg = release_static_mt|x64
 		{B057A1FE-09F7-465E-B8B5-E1B659051D76}.release_static_mt|x64.Build.0 = release_static_mt|x64
 		{6FF56CDB-787A-4714-A28C-919003F9FA6C}.debug_static_mt|Mixed Platforms.ActiveCfg = debug_static_mt|x64
-		{6FF56CDB-787A-4714-A28C-919003F9FA6C}.debug_static_mt|Mixed Platforms.Build.0 = debug_static_mt|x64
 		{6FF56CDB-787A-4714-A28C-919003F9FA6C}.debug_static_mt|Win32.ActiveCfg = debug_static_mt|x64
 		{6FF56CDB-787A-4714-A28C-919003F9FA6C}.debug_static_mt|x64.ActiveCfg = debug_static_mt|x64
 		{6FF56CDB-787A-4714-A28C-919003F9FA6C}.debug_static_mt|x64.Build.0 = debug_static_mt|x64
@@ -81,7 +78,6 @@ Global
 		{6FF56CDB-787A-4714-A28C-919003F9FA6C}.release_static_mt|x64.ActiveCfg = release_static_mt|x64
 		{6FF56CDB-787A-4714-A28C-919003F9FA6C}.release_static_mt|x64.Build.0 = release_static_mt|x64
 		{9E211743-85FE-4977-82F3-4F04B40C912D}.debug_static_mt|Mixed Platforms.ActiveCfg = debug_static_mt|x64
-		{9E211743-85FE-4977-82F3-4F04B40C912D}.debug_static_mt|Mixed Platforms.Build.0 = debug_static_mt|x64
 		{9E211743-85FE-4977-82F3-4F04B40C912D}.debug_static_mt|Win32.ActiveCfg = debug_static_mt|x64
 		{9E211743-85FE-4977-82F3-4F04B40C912D}.debug_static_mt|x64.ActiveCfg = debug_static_mt|x64
 		{9E211743-85FE-4977-82F3-4F04B40C912D}.debug_static_mt|x64.Build.0 = debug_static_mt|x64

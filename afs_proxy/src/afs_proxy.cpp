@@ -134,13 +134,13 @@ class AtticRequestHandlerFactory: public HTTPRequestHandlerFactory
             }
 
         HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request)
-            {
+            {   
                 if(request.getURI() == "/favicon.ico"){
                         return new FavIconRequestHandler();
-                }else if(request.getURI() == "/"){
-                        return new RootRequestHandler;
-                }else{
+                }else if(request.getURI().substr(0,6) == "/data/"){
                         return new AtticRequestHandler;
+                }else{
+                        return new RootRequestHandler;
                 }
             }
     };

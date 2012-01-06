@@ -14,3 +14,13 @@ afs_proxy/afs_proxy.vcxproj.filters
 /xml_test_parser/Debug
 *.obj
 *.user
+*.sdf
+*.suo
+*.manifest
+*.tlog
+*.rc
+*.lastbuildstate
+*.idb
+*.pdb
+*.res
+*.ilk
