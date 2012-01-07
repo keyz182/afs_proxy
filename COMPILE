@@ -1,19 +1,38 @@
 Compiling linux:
 
-Requires: OpenSSL-dev
+On a clean Ubuntu Server 11.10 64bit install.
+Update the system:
+sudo apt-get update
+sudo apt-get dist-upgrade
+sudo apt-get install build-essential libtool autoconf pkg-config libssl-dev git
 
-cd libs/poco
-./configure --no-tests --no-samples --static --omit=Data/MySQL,Data/ODBC,Zip,Crypto,CppUnit,NetSSL_OpenSSL
-make -j4
+Checkout the code:
+git clone git://github.com/keyz182/afs_proxy.git
+cd afs_proxy 
+git submodule init
+git submodule update
 
-cd ../boinc
+Compile BOINC:
+cd libs/boinc
 ./_autosetup
 ./configure -C --enable-pkg-devel --enable-debug --enable-static
 make -j4
 
+Compile Poco:
+cd ../poco
+./configure --no-tests --no-samples --static --omit=Data/MySQL,Data/ODBC,Zip,Crypto,CppUnit,NetSSL_OpenSSL
+make -j4
+
+Compile afs_proxy
 cd ../../afs_proxy
+make
 
 
+Compiling Windows:
+
+Open up afs_proxy_x**.sln in Visual Studio 2010 (Or Visual Studio Express 2010, it's free).
+Build.
+Done.
 
 
 Compiling OSX:
