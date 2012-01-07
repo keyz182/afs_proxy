@@ -1,18 +1,40 @@
-DEBUG = -g
-CFLAGS = -Wall $(DEBUG)
+POCO_BASE=../libs/poco
 
-INCLUDES = -I./includes -I../libs/boinc -I../libs/boinc/lib -I../libs/boinc/api -I../libs/poco/Foundation/include -I../libs/poco/Util/include -I../libs/poco/Net/include -I../libs/poco/XML/include
+PROJECT_BASE = $(shell cd ..; pwd; cd afs_proxy)
 
-cppsources_afs = AtticRequestHandler Chunk Filehash HTTPUtils PointerCollection
-main_ex = afs_proxy
+POCO_ADD_INCLUDE += ./src ./includes ../libs/boinc ../libs/boinc/lib ../libs/boinc/api
+POCO_ADD_LIBRARY += ../libs/boinc/* ../libs/boinc/lib ../libs/boinc/api
 
-all:
-	@for cppfile in $(cppsources_afs); do \
-	echo Compiling $$cppfile; \
-	g++ $(CFLAGS) src/$$cppfile.cpp -o $$cppfile.o -c $(INCLUDES); \
-	done;	
-	g++ $(CFLAGS) src/afs_proxy.cpp *.o $(INCLUDES) -o ../afs_proxy_app -pthread -ldl -L../libs/boinc/* -L../libs/boinc/lib -L../libs/poco/lib/Linux/x86_64 -L../libs//boinc/api -lboinc_api -lboinc -lPocoXMLd -lPocoUtild -lPocoNetd -lPocoFoundationd -lPocoDatad
-	
-clean:
-	rm *.o
+include $(POCO_BASE)/build/rules/global
+
+objects = AtticRequestHandler Chunk Filehash HTTPUtils PointerCollection afs_proxy
+
+target         = afs_proxy
+target_libs    = PocoUtil PocoNet PocoXML PocoFoundation
+
+SYSLIBS += -lboinc_api -lboinc
+
+include $(POCO_BASE)/build/rules/exec
+
+
+#LIBS = -L ../libs/poco/lib/Linux/x86_64 -lPocoFoundationd -lPocoDatad -lPocoXMLd -lPocoUtild -lPocoNetd -pthread -ldl -L../libs/boinc/* -L../libs/boinc/lib -L../libs//boinc/api -lboinc_api -lboinc
+#DEBUG = -g
+#CFLAGS = -Wall -Wall -Wno-sign-compare -static -g -D_DEBUG
+#BUILDDIR = build/
+
+
+#cppsources_afs = AtticRequestHandler Chunk Filehash HTTPUtils PointerCollection
+#main_ex = afs_proxy
+
+
+#all:	
+#	-mkdir $(BUILDDIR)
+#	@for cppfile in $(cppsources_afs); do \
+#	echo Compiling $$cppfile; \
+#	g++ $(CFLAGS) src/$$cppfile.cpp -o $(BUILDDIR)$$cppfile.o -c $(INCLUDES); \
+#	done;	
+#	g++ $(CFLAGS) src/afs_proxy.cpp $(BUILDDIR)*.o $(INCLUDES) -o afs_proxy $(LIBS)
+#	
+#clean:
+#	-rm -rf $(BUILDDIR)
 

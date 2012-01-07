@@ -81,12 +81,12 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src/afs_proxy.cpp" />
-    <ClCompile Include="src/AtticRequestHandler.cpp" />
-    <ClCompile Include="src/Chunk.cpp" />
-    <ClCompile Include="src/Filehash.cpp" />
-    <ClCompile Include="src/HTTPUtils.cpp" />
-    <ClCompile Include="src/PointerCollection.cpp" />
+    <ClCompile Include="src\afs_proxy.cpp" />
+    <ClCompile Include="src\AtticRequestHandler.cpp" />
+    <ClCompile Include="src\Chunk.cpp" />
+    <ClCompile Include="src\Filehash.cpp" />
+    <ClCompile Include="src\HTTPUtils.cpp" />
+    <ClCompile Include="src\PointerCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libs\libboincapi_staticcrt.vcxproj">
@@ -114,12 +114,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="includes/AtticRequestHandler.h" />
-    <ClInclude Include="includes/Chunk.h" />
-    <ClInclude Include="includes/favicon.h" />
-    <ClInclude Include="includes/Filehash.h" />
-    <ClInclude Include="includes/HTTPUtils.h" />
-    <ClInclude Include="includes/PointerCollection.h" />
+    <ClInclude Include="src\AtticRequestHandler.h" />
+    <ClInclude Include="src\Chunk.h" />
+    <ClInclude Include="src\favicon.h" />
+    <ClInclude Include="src\Filehash.h" />
+    <ClInclude Include="src\HTTPUtils.h" />
+    <ClInclude Include="src\PointerCollection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,3 +22,4 @@ afs_proxy/afs_proxy.vcxproj.filters
 *.res
 *.ilk
 /libs/_UpgradeReport_Files
+.dep
