@@ -66,8 +66,8 @@
 
 #ifdef _WIN32
 //#include "boinc_win.h"
-#else
 #include "config.h"
+#else
 #include <cstdio>
 #include <cctype>
 #include <ctime>

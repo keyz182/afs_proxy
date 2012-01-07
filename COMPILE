@@ -1,3 +1,5 @@
+Compiling linux:
+
 Requires: OpenSSL-dev
 
 cd libs/poco
@@ -12,3 +14,50 @@ make -j4
 cd ../../afs_proxy
 
 
+
+
+Compiling OSX:
+
+Unfortunately, it's a bit more difficult on OSX.
+
+First, check out the code with the following commands:
+
+git clone git://github.com/keyz182/afs_proxy.git
+cd afs_proxy
+git submodule init
+git submodule update
+
+Now, we need to download and build the BOINC dependencies:
+
+cd libs
+wget http://curl.haxx.se/download/curl-7.21.7.tar.gz
+wget http://c-ares.haxx.se/download/c-ares-1.7.4.tar.gz
+tar xvf curl-7.21.7.tar.gz
+tar xvf c-ares-1.7.4.tar.gz
+
+cd boinc/mac_build
+source setupForBoinc.sh -clean
+
+The script may complain that wxMac doesn't exist, this is fine.
+Now, to compile BOINC, run:
+
+source BuildMacBOINC.sh -lib
+
+Now to build POCO.
+
+cd ../../poco
+./configure --no-tests --no-samples --static --omit=Data/MySQL,Data/ODBC,Zip,Crypto,CppUnit,NetSSL_OpenSSL
+make -j4
+
+Now, to build afs_proxy:
+
+cd ../../afs_proxy
+make
+
+...
+
+...
+
+Done!
+
+Go to bin/Darwin/{arch}/ and there should be two binaries, afs_proxy and afs_proxyd, the second being a debugging build.

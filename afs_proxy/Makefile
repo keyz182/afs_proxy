@@ -3,7 +3,7 @@ POCO_BASE=../libs/poco
 PROJECT_BASE = $(shell cd ..; pwd; cd afs_proxy)
 
 POCO_ADD_INCLUDE += ./src ./includes ../libs/boinc ../libs/boinc/lib ../libs/boinc/api
-POCO_ADD_LIBRARY += ../libs/boinc/* ../libs/boinc/lib ../libs/boinc/api
+POCO_ADD_LIBRARY += ../libs/boinc/* ../libs/boinc/lib ../libs/boinc/api ../libs/boinc/mac_build/build/Deployment
 
 include $(POCO_BASE)/build/rules/global
 
